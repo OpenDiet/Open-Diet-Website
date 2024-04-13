@@ -14,7 +14,7 @@ jobs:
           command: |
             lftp -u $FTP_USERNAME,$FTP_PASSWORD $FTP_HOST \<<EOF
             set ssl:verify-certificate no
-            mirror --reverse --verbose --delete-first --exclude-glob ./github --exclude-glob ./git --exclude-glob ./circleci --exclude-glob .well_known/ --exclude-glob .gitignore /home/circleci/project/ /
+            mirror --reverse --verbose --delete-first --exclude-glob .git/ --exclude-glob .github/ --exclude-glob .circleci/ --exclude-glob .well_known/ --exclude-glob .gitignore /home/circleci/project/ /
             quit
             EOF
 
