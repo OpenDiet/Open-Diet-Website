@@ -1,0 +1,25 @@
+version: 2.1
+
+jobs:
+  deploy:
+    docker:
+      - image: cimg/base:stable
+    steps:
+      - checkout
+      - run:
+          name: Install FTP client
+          command: sudo apt-get update && sudo apt-get -y install lftp
+      - run:
+          name: Deploy to FTP
+          command: |
+            lftp -u $FTP_USERNAME,$FTP_PASSWORD $FTP_HOST \<<EOF
+            set ssl:verify-certificate no
+            mirror --reverse --verbose --delete-first --exclude-glob ./git --exclude-glob ./circleci --exclude-glob .well_known/ --exclude-glob .gitignore /home/circleci/project/ /
+            quit
+            EOF
+
+workflows:
+  version: 2
+  deploy_workflow:
+    jobs:
+      - deploy
